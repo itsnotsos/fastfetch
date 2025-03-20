@@ -205,7 +205,6 @@ jobs:
           rm *.deb
 
       - name: Create Click package structure
-        name: Create Click package structure
         run: |
           # Create directory structure
           mkdir -p click/usr/bin
