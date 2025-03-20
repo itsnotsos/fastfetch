@@ -204,6 +204,36 @@ jobs:
           # Clean up
           rm *.deb
 
+      - name: Create Click package structure
+        run: |
+          mkdir -p click/usr/bin
+          mkdir -p click/usr/share/fastfetch/presets/examples
+          mkdir -p click/usr/share/licenses/fastfetch
+          mkdir -p click/usr/share/bash-completion/completions
+          mkdir -p click/usr/share/zsh/site-functions
+          mkdir -p click/usr/share/fish/vendor_completions.d
+          mkdir -p click/usr/share/man/man1
+
+          # Copy binaries
+          cp fastfetch click/usr/bin/
+          cp flashfetch click/usr/bin/
+          chmod +x click/usr/bin/fastfetch click/usr/bin/flashfetch
+
+          # Copy presets
+          cp -r presets/*.jsonc click/usr/share/fastfetch/presets/
+          cp -r presets/examples/*.jsonc click/usr/share/fastfetch/presets/examples/
+
+          # Copy additional files
+          cp LICENSE click/usr/share/licenses/fastfetch/
+          cp completions/bash click/usr/share/bash-completion/completions/fastfetch
+          cp completions/zsh click/usr/share/zsh/site-functions/_fastfetch
+          cp completions/fish click/usr/share/fish/vendor_completions.d/fastfetch.fish
+          cp doc/fastfetch.1 click/usr/share/man/man1/
+
+          # Debug: Verify structure
+          ls -lh click/usr/bin/
+          ls -lhR click/usr/share/
+
       - name: Build Click package
         run: |
           cd click
