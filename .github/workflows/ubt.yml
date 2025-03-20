@@ -1,0 +1,47 @@
+name: Build Fastfetch Click Package for Ubuntu Touch
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-click:
+    runs-on: ubuntu-24.04 
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build tools and Click dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential gcc-aarch64-linux-gnu g++-aarch64-linux-gnu click libpci-dev libvulkan-dev libwayland-dev libxrandr-dev libxcb-randr0-dev libdconf-dev libdbus-1-dev libsqlite3-dev
+
+      - name: Configure CMake for ARM64
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/aarch64-toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build fastfetch
+        run: |
+          cd build
+          make -j$(nproc)
+
+      - name: Prepare Click package
+        run: |
+          mkdir -p click/bin
+          cp build/src/fastfetch click/bin/
+          cp -r click/* click/
+          chmod +x click/bin/fastfetch
+
+      - name: Build Click package
+        run: |
+          cd click
+          click build --force .
+          mv *.click ../fastfetch.click
+
+      - name: Upload Click package
+        uses: actions/upload-artifact@v4
+        with:
+          name: fastfetch-click-package
+          path: fastfetch.click
