@@ -207,7 +207,7 @@ jobs:
       - name: Build Click package
         run: |
           cd click
-          click build --force .
+          click build .
           mv *.click ../fastfetch_${{ steps.ffversion.outputs.ffversion }}_arm64.click
 
       - name: Upload artifacts
