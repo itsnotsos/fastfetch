@@ -1,0 +1,16 @@
+{
+    "name": "fastfetch",
+    "version": "2.39.0",
+    "framework": "ubuntu-sdk-24.04",
+    "architecture": "arm64",
+    "title": "Fastfetch",
+    "description": "A fast system information tool for Ubuntu Touch",
+    "maintainer": "Burhanverse <contact@burhanverse.eu.org>",
+    "hooks": {
+        "fastfetch": {
+            "apparmor": "fastfetch.apparmor",
+            "desktop": "fastfetch.desktop",
+            "exec": "bin/fastfetch"
+        }
+    }
+}
