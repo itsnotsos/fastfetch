@@ -189,17 +189,20 @@ jobs:
         run: echo "ffversion=$(./fastfetch --version-raw)" >> $GITHUB_OUTPUT
 
       # --- New Steps for Click Package ---
-      - name: Install python3-click package
+      - name: Install Click and dependencies for arm64 from Ubuntu Ports
         run: |
-          wget http://www.ports.ubuntu.com/pool/universe/c/click/python3-click-package_0.5.2-2ubuntu4_all.deb
-          sudo dpkg -i python3-click-package_0.5.2-2ubuntu4_all.deb || sudo apt-get install -f -y
-          rm python3-click-package_0.5.2-2ubuntu4_all.deb
-          
-      - name: Install Click package tools
-        run: |
-          wget http://www.ports.ubuntu.com/pool/universe/c/click/click-dev_0.5.2-2ubuntu4_arm64.deb
-          sudo dpkg -i click-dev_0.5.2-2ubuntu4_arm64.deb || sudo apt-get install -f -y
-          rm click-dev_0.5.2-2ubuntu4_arm64.deb
+          # Base URL for Ubuntu Ports
+          BASE_URL="http://www.ports.ubuntu.com/pool/universe/c/click"
+          wget $BASE_URL/gir1.2-click-0.4_0.5.2-2ubuntu4_arm64.deb
+          wget $BASE_URL/python3-click-package_0.5.2-2ubuntu4_all.deb
+          wget $BASE_URL/libclick-dev_0.5.2-2ubuntu4_arm64.deb
+          wget $BASE_URL/click_0.5.2-2ubuntu4_arm64.deb
+          wget $BASE_URL/click-dev_0.5.2-2ubuntu4_arm64.deb
+          wget $BASE_URL/libclick-0.4-0_0.5.2-2ubuntu4_arm64.deb
+          # Install downloaded packages, fixing dependencies
+          sudo dpkg -i *.deb || sudo apt-get install -f -y
+          # Clean up
+          rm *.deb
 
       - name: Build Click package
         run: |
