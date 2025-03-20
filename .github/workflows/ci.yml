@@ -157,13 +157,7 @@ jobs:
             libsqlite3-dev librpm-dev libegl-dev libglx-dev ocl-icd-opencl-dev \
             libpulse-dev libdrm-dev libelf-dev directx-headers-dev libchafa-dev \
             libddcutil-dev rpm
-
-      - name: Install Click package tools
-        run: |
-          wget http://www.ports.ubuntu.com/pool/universe/c/click/click_0.5.2-2ubuntu4_arm64.deb
-          sudo dpkg -i click_0.5.2-2ubuntu4_arm64.deb || sudo apt-get install -f -y
-          rm click_0.5.2-2ubuntu4_arm64.deb
-
+      
       - name: Configure project
         run: |
           cmake -DSET_TWEAK=Off -DBUILD_TESTS=On -DENABLE_EMBEDDED_PCIIDS=On \
@@ -195,6 +189,12 @@ jobs:
         run: echo "ffversion=$(./fastfetch --version-raw)" >> $GITHUB_OUTPUT
 
       # --- New Steps for Click Package ---
+      - name: Install python3-click package
+        run: |
+          wget http://www.ports.ubuntu.com/pool/universe/c/click/python3-click-package_0.5.2-2ubuntu4_all.deb
+          sudo dpkg -i python3-click-package_0.5.2-2ubuntu4_all.deb || sudo apt-get install -f -y
+          rm python3-click-package_0.5.2-2ubuntu4_all.deb
+          
       - name: Install Click package tools
         run: |
           wget http://www.ports.ubuntu.com/pool/universe/c/click/click-dev_0.5.2-2ubuntu4_arm64.deb
